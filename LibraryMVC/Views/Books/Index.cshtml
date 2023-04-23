@@ -1,5 +1,5 @@
-﻿@model IEnumerable<LibraryMVC.Models.Book>
-
+﻿@model X.PagedList.IPagedList<LibraryMVC.Models.Book>
+@using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "Index";
 }
@@ -9,13 +9,20 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@using (Html.BeginForm("Index","Book",FormMethod.Get))
+{
+    <p>
+        Find a book: @Html.TextBox("SearchString",ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-primary"/>
+    </p>
+}
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.AuthorSortParm })
+            @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.AuthorSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
-            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm })
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
             Year of Production
@@ -46,3 +53,8 @@
 }
     </tbody>
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -9,6 +9,7 @@ using LibraryMVC.Data;
 using LibraryMVC.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using X.PagedList;
 
 namespace LibraryMVC.Controllers
 {
@@ -22,12 +23,28 @@ namespace LibraryMVC.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.AuthorSortParm = String.IsNullOrEmpty(sortOrder) ? "author_desc" : "";
             ViewBag.TitleSortParm = sortOrder == "title" ? "title_desc" : "title";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
             var books = from s in _context.Book
                            select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Author.Contains(searchString)
+                                       || s.Title.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "title_desc":
@@ -43,7 +60,9 @@ namespace LibraryMVC.Controllers
                     books = books.OrderBy(s => s.Title);
                     break;
             }
-            return View(books.ToList());
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(books.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Books/Details/5
