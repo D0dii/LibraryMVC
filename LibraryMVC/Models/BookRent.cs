@@ -6,6 +6,9 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Fee { get; set; }
+        public User User { get; set; }
+        public int UserId { get; set; }
+        public ICollection<Book> books { get; set; }
         public int countFee()
         {
             DateTime today = DateTime.Now;
