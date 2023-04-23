@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LibraryMVC.Data;
 using LibraryMVC.Models;
 using System.Data;
+using Microsoft.Data.SqlClient;
 
 namespace LibraryMVC.Controllers
 {
@@ -21,11 +22,28 @@ namespace LibraryMVC.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-              return _context.Book != null ? 
-                          View(await _context.Book.ToListAsync()) :
-                          Problem("Entity set 'LibraryMVCContext.Book'  is null.");
+            ViewBag.AuthorSortParm = String.IsNullOrEmpty(sortOrder) ? "author_desc" : "";
+            ViewBag.TitleSortParm = sortOrder == "title" ? "title_desc" : "title";
+            var books = from s in _context.Book
+                           select s;
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    books = books.OrderByDescending(s => s.Title);
+                    break;
+                case "author":
+                    books = books.OrderBy(s => s.Author);
+                    break;
+                case "author_desc":
+                    books = books.OrderByDescending(s => s.Author);
+                    break;
+                default:
+                    books = books.OrderBy(s => s.Title);
+                    break;
+            }
+            return View(books.ToList());
         }
 
         // GET: Books/Details/5

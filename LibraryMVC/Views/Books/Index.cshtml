@@ -10,23 +10,18 @@
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YearOfProduction)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isAvaible)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+    <tr>
+        <th>
+            @Html.ActionLink("Author", "Index", new { sortOrder = ViewBag.AuthorSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm })
+        </th>
+        <th>
+            Year of Production
+        </th>
+        <th></th>
+    </tr>
     <tbody>
 @foreach (var item in Model) {
         <tr>
