@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-@using (Html.BeginForm("Index","Book",FormMethod.Get))
+@using (Html.BeginForm("Index","Books",FormMethod.Get))
 {
     <p>
         Find a book: @Html.TextBox("SearchString",ViewBag.CurrentFilter as string)
