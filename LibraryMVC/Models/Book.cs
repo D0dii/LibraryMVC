@@ -7,5 +7,6 @@
         public string Title { get; set; }
         public int YearOfProduction { get; set; }
         public Boolean isAvaible { get; set; }
+
     }
 }

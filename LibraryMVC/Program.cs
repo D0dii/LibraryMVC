@@ -8,7 +8,13 @@ builder.Services.AddDbContext<LibraryMVCContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<DbInitializer>();
+
 var app = builder.Build();
+
+var scoped = app.Services.CreateScope();
+var seeder = scoped.ServiceProvider.GetRequiredService<DbInitializer>();
+await seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
