@@ -10,6 +10,7 @@ using LibraryMVC.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryMVC.Controllers
 {
@@ -206,7 +207,7 @@ namespace LibraryMVC.Controllers
         {
           return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
+        [Authorize]
         public async Task<IActionResult> RentBook(int? id)
         {
             if (id == null || _context.Books == null)
