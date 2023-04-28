@@ -206,5 +206,20 @@ namespace LibraryMVC.Controllers
         {
           return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        public async Task<IActionResult> RentBook(int? id)
+        {
+            if (id == null || _context.Books == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return View(book);
+        }
     }
 }

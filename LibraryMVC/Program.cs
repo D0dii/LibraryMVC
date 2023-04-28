@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using LibraryMVC.Data;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<LibraryMVCContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryMVCContext")));
@@ -9,6 +11,7 @@ builder.Services.AddDbContext<LibraryMVCContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<LibraryMVCContext>();
 
 var app = builder.Build();
 
@@ -35,4 +38,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapRazorPages();
 app.Run();
